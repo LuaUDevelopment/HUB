@@ -40,7 +40,7 @@ local CONFIG = {
         success = Color3.fromRGB(76, 175, 80),
         error = Color3.fromRGB(244, 67, 54),
         warning = Color3.fromRGB(255, 193, 7),
-        notifBg = Color3.fromRGB(35, 35, 42),  -- Dark gray-black
+        notifBg = Color3.fromRGB(35, 35, 42),
     },
     
     --// Material Icons (Unicode)
@@ -117,7 +117,6 @@ local function IsPlayerWhitelisted()
     return false
 end
 
---// Check for saved valid key
 if not CONFIG.KEYLESS and not IsPlayerWhitelisted() then
     local savedKey = LoadSavedKey()
     if savedKey then
@@ -149,7 +148,6 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = Parent
 
--- NO BACKDROP - Transparent background
 local backdrop = Instance.new("Frame")
 backdrop.Size = UDim2.new(1, 0, 1, 0)
 backdrop.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -279,7 +277,7 @@ keyInput.FocusLost:Connect(function()
     TweenService:Create(inputStroke, TweenInfo.new(0.2), {Color = CONFIG.COLORS.border, Thickness = 1}):Play()
 end)
 
---// Status Label (Di atas Input)
+--// Status Label
 local statusLabel = Instance.new("TextLabel")
 statusLabel.Size = UDim2.new(1, 0, 0, 15)
 statusLabel.Position = UDim2.new(0, 0, 0, 8)
@@ -331,11 +329,11 @@ buttonLayout.Padding = UDim.new(0, 20)
 buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
 buttonLayout.Parent = secondaryButtons
 
---// Notification System dengan animasi yang bagus
+--// Notification System
 local function ShowNotification(message, duration)
     local notifContainer = Instance.new("Frame")
     notifContainer.Size = UDim2.new(0, 300, 0, 50)
-    notifContainer.Position = UDim2.new(0.5, -150, 0.5, -170)
+    notifContainer.Position = UDim2.new(0.5, -150, 0.5, -340)
     notifContainer.BackgroundColor3 = CONFIG.COLORS.notifBg
     notifContainer.BorderSizePixel = 0
     notifContainer.Parent = ScreenGui
@@ -346,7 +344,6 @@ local function ShowNotification(message, duration)
     notifCorner.CornerRadius = UDim.new(0, 12)
     notifCorner.Parent = notifContainer
     
-    -- Shadow effect
     local notifShadow = Instance.new("UIStroke")
     notifShadow.Color = Color3.fromRGB(0, 0, 0)
     notifShadow.Thickness = 2
@@ -361,7 +358,6 @@ local function ShowNotification(message, duration)
     notifText.Font = CONFIG.UI.FONT_BOLD
     notifText.Parent = notifContainer
     
-    -- Entrance Animation - Slide in dengan scale dan fade
     notifContainer.Size = UDim2.new(0, 0, 0, 50)
     notifContainer.BackgroundTransparency = 1
     notifText.TextTransparency = 1
@@ -391,14 +387,12 @@ local function ShowNotification(message, duration)
         {Transparency = 0}
     ):Play()
     
-    -- Wait duration
     task.wait(duration or 2)
     
-    -- Exit Animation - Scale down dengan fade out
     TweenService:Create(
         notifContainer,
         TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-        {Size = UDim2.new(0, 0, 0, 50), Position = UDim2.new(0.5, 0, 0.5, -170)}
+        {Size = UDim2.new(0, 0, 0, 50), Position = UDim2.new(0.5, 0, 0.5, -340)}
     ):Play()
     
     TweenService:Create(
@@ -529,7 +523,6 @@ local function VerifyKey()
     
     ScreenGui:Destroy()
     
-    -- Load appropriate loader based on key type
     if isPremium then
         LoadMainLoader(CONFIG.PREMIUM_LOADER_URL)
     else
@@ -543,5 +536,4 @@ keyInput.FocusLost:Connect(function(EnterPressed)
     if EnterPressed then VerifyKey() end
 end)
 
---// Entrance Animation
 TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {BackgroundTransparency = 0}):Play()
